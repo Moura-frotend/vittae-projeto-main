@@ -534,6 +534,19 @@ main {
     color: #d1d5db;
 }
 
+.footer-bottom2 {
+    border-top: 1px solid #ffffff;
+    padding-top: 1rem;
+    text-align: center;
+    color: #d1d5db;
+    width: 50%;
+    margin: 30px auto;
+
+    p {
+        color: white;
+    }
+}
+
 /* Smooth transitions for page changes */
 .page {
     animation: fadeIn 0.5s ease-in-out;
