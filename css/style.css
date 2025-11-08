@@ -3,8 +3,8 @@
     padding: 0;
     box-sizing: border-box;
     ::selection {
-              color: #000000;
-              background-color: #c8b0ff;
+              color: none;
+              background-color: #b493ff;
           }
 }
 
