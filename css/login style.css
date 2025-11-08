@@ -6,31 +6,10 @@
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
 }
 
-/*@font-face{
-    font-family: nome da fonte;
-    src: url(aqui coloca a mais fina (Light) );
-    font-weight: 300;
-    font-style: normal;
-}
-*/
-/*@font-face{
-    font-family: nome da fonte;
-    src: url(aqui coloca a regular (Regular) );
-    font-weight: 400;
-    font-style: normal;
-}
-*/
-/*@font-face{
-    font-family: nome da fonte;
-    src: url(aqui coloca a mais grossa (Bold) );
-    font-weight: 700;
-    font-style: normal;
-}
-*/
+
 
 body{
     color: white;
-    /*chamar a fonte padão pro site*/
     
 }
 
@@ -40,8 +19,7 @@ form{
     gap: 16px;
 
     button{
-        background: linear-gradient(90deg,
-        #968FF8 0%, #F1D3F9 100%);
+        background: linear-gradient(90deg,#8A3FFC 0%, #B57CFF 100%);
         ;
     }
 }
@@ -58,17 +36,17 @@ input, button{
 
 input{
     background-color: rgba(0, 0, 0, .2);
-    color: rgba(255, 255, 255, .9);
+    color: rgba(0, 0, 0, .5);
 }
 
 input::placeholder{
-    color: rgba(255, 255, 255, .5);
+    color: rgba(0, 0, 0, .6);
 }
 
 button{
     margin-top: 8px;
     font-weight: 700;
-    color: rgba(0, 0, 0, .8);
+    color: rgba(255, 255, 255, 0.8);
     padding: 16px;
     cursor: pointer;
     transition: all .3s;
@@ -106,6 +84,7 @@ p{
     width: 80%;
     height: 90vh;
     background-color: #ffffff;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     border-radius: 32px;
     padding: 32px, 20px;
     display: flex;
@@ -115,7 +94,7 @@ p{
     overflow: hidden;
 
     h2 {
-        color: black;
+        color: #8A3FFC;
     }
 }
 .direita, .esquerda{
