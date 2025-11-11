@@ -119,13 +119,13 @@ function validateForm(formId) {
     return isValid;
 }
 
-// Toast Notification System
+// toats notificações sistemas
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     toast.textContent = message;
 
-    // Style the toast
+    // estilo do toast
     toast.style.cssText = `
         position: fixed;
         top: 20px;
@@ -143,7 +143,7 @@ function showToast(message, type = 'info') {
 
     document.body.appendChild(toast);
 
-    // Remove toast after 3 seconds
+    // remover toast 3 segundos
     setTimeout(() => {
         toast.style.animation = 'slideOutRight 0.3s ease-out';
         setTimeout(() => {
@@ -154,7 +154,7 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// Add CSS for toast animations
+// Add CSS para toast animações
 function addToastStyles() {
     if (document.getElementById('toast-styles')) return;
 

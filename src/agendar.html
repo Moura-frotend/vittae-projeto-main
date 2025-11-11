@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Consulta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1000px;
+            width: 100%;
+            padding: 20px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #6D28D9;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #374151;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        input:hover,
+        select:hover,
+        textarea:hover {
+            border-color: #A78BFA;
+        }
+
+        select {
+            cursor: pointer;
+            background-color: white;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236D28D9' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .time-slot {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            background: white;
+        }
+
+        .time-slot:hover {
+            border-color: #A78BFA;
+            background: #F3F4F6;
+        }
+
+        .time-slot.selected {
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+            color: white;
+            border-color: #7C3AED;
+            transform: scale(1.05);
+        }
+
+        .time-slot.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #f9fafb;
+        }
+
+        .time-slot.disabled:hover {
+            border-color: #e5e7eb;
+            background: #f9fafb;
+            transform: none;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast-message {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .toast {
+                left: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Agendamento de Consulta</h1>
+            <p>Preencha os dados abaixo para agendar sua consulta</p>
+        </div>
+
+        <form id="appointmentForm">
+            <div class="form-group">
+                <label for="name">Nome Completo *</label>
+                <input type="text" id="name" name="name" placeholder="Digite seu nome completo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telefone *</label>
+                <input type="tel" id="phone" name="phone" placeholder="(00) 00000-0000" required maxlength="15">
+            </div>
+
+            <div class="form-group">
+                <label for="doctor">Médico *</label>
+                <select id="doctor" name="doctor" required>
+                    <option value="">Selecione um médico</option>
+                    <option value="dr-silva">Dr. João Silva - Cardiologista</option>
+                    <option value="dra-santos">Dra. Maria Santos - Dermatologista</option>
+                    <option value="dr-oliveira">Dr. Pedro Oliveira - Ortopedista</option>
+                    <option value="dra-costa">Dra. Ana Costa - Pediatra</option>
+                    <option value="dr-ferreira">Dr. Carlos Ferreira - Clínico Geral</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Data da Consulta *</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label>Horário Disponível *</label>
+                <div class="time-slots" id="timeSlots">
+                    <div class="time-slot" data-time="08:00">08:00</div>
+                    <div class="time-slot" data-time="09:00">09:00</div>
+                    <div class="time-slot" data-time="10:00">10:00</div>
+                    <div class="time-slot" data-time="11:00">11:00</div>
+                    <div class="time-slot disabled" data-time="12:00">12:00</div>
+                    <div class="time-slot" data-time="14:00">14:00</div>
+                    <div class="time-slot" data-time="15:00">15:00</div>
+                    <div class="time-slot disabled" data-time="16:00">16:00</div>
+                    <div class="time-slot" data-time="17:00">17:00</div>
+                </div>
+                <input type="hidden" id="time" name="time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Observações</label>
+                <textarea id="notes" name="notes" placeholder="Descreva seus sintomas ou motivo da consulta (opcional)"></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">Agendar Consulta</button>
+        </form>
+    </div>
+
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toastIcon"></span>
+        <span class="toast-message" id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Configurar data mínima (hoje)
+        const dateInput = document.getElementById('date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+
+        // Máscara de telefone
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+            }
+            e.target.value = value;
+        });
+
+        // Seleção de horário
+        const timeSlots = document.querySelectorAll('.time-slot:not(.disabled)');
+        const timeInput = document.getElementById('time');
+
+        timeSlots.forEach(slot => {
+            slot.addEventListener('click', function() {
+                timeSlots.forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                timeInput.value = this.dataset.time;
+            });
+        });
+
+        // Função para mostrar toast
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toast.className = `toast ${type} show`;
+            toastIcon.textContent = type === 'success' ? '✓' : '✕';
+            toastMessage.textContent = message;
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // Submissão do formulário
+        const form = document.getElementById('appointmentForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validar se horário foi selecionado
+            if (!timeInput.value) {
+                showToast('Por favor, selecione um horário!', 'error');
+                return;
+            }
+
+            // Coletar dados do formulário
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                doctor: document.getElementById('doctor').value,
+                date: document.getElementById('date').value,
+                time: timeInput.value,
+                notes: document.getElementById('notes').value
+            };
+
+            // Mostrar dados no console (simulação)
+            console.log('Dados do agendamento:', formData);
+
+            // Mostrar mensagem de sucesso
+            showToast('Consulta agendada com sucesso! 🎉', 'success');
+
+            // Resetar formulário após 2 segundos
+            setTimeout(() => {
+                form.reset();
+                timeSlots.forEach(s => s.classList.remove('selected'));
+                timeInput.value = '';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
